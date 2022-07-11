@@ -302,7 +302,7 @@ get_cluster_info_from_init_nodes([Node|Nodes], Options, Query, FailFn, ErrorList
                 eredis:stop(Connection)
             end;
         Reason ->
-            io:format("[monitor] Reason being called, Reason: ", [Reason]),
+            io:format("[monitor] Reason being called, Reason: ~s", [Reason]),
             get_cluster_info_from_init_nodes(Nodes, Options, Query, FailFn,
                                              [{Node, Reason} | ErrorList])
     end.
