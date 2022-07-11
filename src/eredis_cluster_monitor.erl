@@ -470,7 +470,7 @@ disconnect_(PoolNodes, State) ->
 %% @private
 init(_Args) ->
     io:format("[monitor] started init~n"),
-    timer.sleep(3000),
+    timer:sleep(3000),
     io:format("[monitor] init slept 3s~n"),
     ets:new(?MODULE, [protected, set, named_table, {read_concurrency, true}]),
     io:format("[monitor] first ets table created~n"),
