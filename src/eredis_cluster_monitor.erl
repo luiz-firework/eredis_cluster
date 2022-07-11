@@ -479,6 +479,8 @@ init(_Args) ->
     InitNodes = application:get_env(eredis_cluster, init_nodes, []),
     AResponse={ok, connect_(InitNodes, [], #state{})}, %% get_env options read later in callstack
     io:format("[monitor]init finished~n"),
+    Working = ets:member(?MODULE),
+    io:format("[monitor]ets table is working fine? ~s ~n", [Working]),
     AResponse.
 
 
