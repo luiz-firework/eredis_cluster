@@ -413,6 +413,7 @@ connect_node(Node) ->
 
 safe_eredis_start_link(Address, Port, Options) ->
     process_flag(trap_exit, true),
+    io:format("[monitor] eredis start_link~n"),
     Result = eredis:start_link(Address, Port, Options),
     process_flag(trap_exit, false),
     Result.
@@ -469,6 +470,8 @@ disconnect_(PoolNodes, State) ->
 %% @private
 init(_Args) ->
     io:format("[monitor] started init~n"),
+    timer.sleep(3000),
+    io:format("[monitor] init slept 3s~n"),
     ets:new(?MODULE, [protected, set, named_table, {read_concurrency, true}]),
     io:format("[monitor] first ets table created~n"),
     ets:new(?SLOTS, [protected, set, named_table, {read_concurrency, true}]),
