@@ -444,7 +444,7 @@ connect_(InitNodes, Options, State) ->
 
     A = reload_slots_map(NewState),
     io:format("[monitor] connect finished~n"),
-    A
+    A.
 
 -spec disconnect_(PoolNodes :: [atom()], State :: #state{}) -> #state{}.
 disconnect_([], State) ->
