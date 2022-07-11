@@ -471,9 +471,9 @@ init(_Args) ->
     ets:new(?SLOTS, [protected, set, named_table, {read_concurrency, true}]),
     io:format("[monitor] second ets table created"),
     InitNodes = application:get_env(eredis_cluster, init_nodes, []),
-    a = {ok, connect_(InitNodes, [], #state{})}, %% get_env options read later in callstack
+    AResponse={ok, connect_(InitNodes, [], #state{})}, %% get_env options read later in callstack
     io:format("[monitor]init finished"),
-    a.
+    AResponse.
 
 
 %% @private
