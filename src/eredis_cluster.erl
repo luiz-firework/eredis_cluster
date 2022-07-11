@@ -66,7 +66,7 @@ stop() ->
 -spec start(StartType::application:start_type(), StartArgs::term()) ->
     {ok, pid()}.
 start(_Type, _Args) ->
-    io:format("[cluster] being started")
+    io:format("[cluster] being started"),
     eredis_cluster_sup:start_link().
 
 %% @private
