@@ -65,7 +65,7 @@ async_refresh_mapping(Version) ->
 %% @private
 -spec get_state() -> #state{}.
 get_state() ->
-    io:format("[monitor] ets will be lookup"),
+    io:format("[monitor] ets will be lookup~n"),
     case ets:lookup(?MODULE, cluster_state) of
         [{cluster_state, State}] ->
             State;
@@ -298,10 +298,11 @@ get_cluster_info_from_init_nodes([Node|Nodes], Options, Query, FailFn, ErrorList
                     get_cluster_info_from_init_nodes(Nodes, Options, Query, FailFn,
                                                      [{Node, Reason} | ErrorList])
             after
-                io:format("[monitor[eredis_stop being called"),
+                io:format("[monitor] eredis_stop being called~n"),
                 eredis:stop(Connection)
             end;
         Reason ->
+            io:format("[monitor] Reason being called"),
             get_cluster_info_from_init_nodes(Nodes, Options, Query, FailFn,
                                              [{Node, Reason} | ErrorList])
     end.
@@ -312,7 +313,7 @@ get_cluster_info_from_init_nodes([Node|Nodes], Options, Query, FailFn, ErrorList
                                        Node       :: #node{}) ->
           ClusterInfo :: redis_simple_result().
 get_cluster_info_from_connection(Connection, Query, FailFn, Node) ->
-    io:format("[monitor] eredis being queried"),
+    io:format("[monitor] eredis being queried~n"),
     try eredis:q(Connection, Query) of
         {ok, ClusterInfo} ->
             {ok, ClusterInfo};
@@ -435,13 +436,15 @@ connect_all_slots(SlotsMapList) ->
 connect_([], _Options, State) ->
     State;
 connect_(InitNodes, Options, State) ->
-    io:format("[monitor] connect started"),
+    io:format("[monitor] connect started~n"),
     NewState = State#state{
         init_nodes = [#node{address = A, port = P} || {A, P} <- InitNodes],
         node_options = Options
     },
 
-    reload_slots_map(NewState).
+    A = reload_slots_map(NewState),
+    io:format("[monitor] connect finished~n"),
+    A
 
 -spec disconnect_(PoolNodes :: [atom()], State :: #state{}) -> #state{}.
 disconnect_([], State) ->
@@ -465,14 +468,14 @@ disconnect_(PoolNodes, State) ->
 
 %% @private
 init(_Args) ->
-    io:format("[monitor] started init"),
+    io:format("[monitor] started init~n"),
     ets:new(?MODULE, [protected, set, named_table, {read_concurrency, true}]),
-    io:format("[monitor] first ets table created"),
+    io:format("[monitor] first ets table created~n"),
     ets:new(?SLOTS, [protected, set, named_table, {read_concurrency, true}]),
-    io:format("[monitor] second ets table created"),
+    io:format("[monitor] second ets table created~n"),
     InitNodes = application:get_env(eredis_cluster, init_nodes, []),
     AResponse={ok, connect_(InitNodes, [], #state{})}, %% get_env options read later in callstack
-    io:format("[monitor]init finished"),
+    io:format("[monitor]init finished~n"),
     AResponse.
 
 
