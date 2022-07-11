@@ -302,7 +302,7 @@ get_cluster_info_from_init_nodes([Node|Nodes], Options, Query, FailFn, ErrorList
                 eredis:stop(Connection)
             end;
         Reason ->
-            io:format("[monitor] Reason being called"),
+            io:format("[monitor] Reason being called, Reason: ", [Reason]),
             get_cluster_info_from_init_nodes(Nodes, Options, Query, FailFn,
                                              [{Node, Reason} | ErrorList])
     end.
@@ -313,7 +313,7 @@ get_cluster_info_from_init_nodes([Node|Nodes], Options, Query, FailFn, ErrorList
                                        Node       :: #node{}) ->
           ClusterInfo :: redis_simple_result().
 get_cluster_info_from_connection(Connection, Query, FailFn, Node) ->
-    io:format("[monitor] eredis being queried~n"),
+    io:format("[monitor] eredis being queried for connection~n"),
     try eredis:q(Connection, Query) of
         {ok, ClusterInfo} ->
             {ok, ClusterInfo};
